@@ -6,14 +6,15 @@
 #    By: gdannay <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/09 16:14:24 by gdannay           #+#    #+#              #
-#    Updated: 2018/03/09 18:07:48 by gdannay          ###   ########.fr        #
+#    Updated: 2018/03/10 14:38:44 by gdannay          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	libft_malloc.a
 
-SRCS	=	srcs/malloc.c		\
-			srcs/zone.c
+SRCS	=	srcs/main.c			\
+			srcs/map.c			\
+			srcs/block.c
 
 OBJS	=	$(SRCS:.c=.o)
 
@@ -21,14 +22,17 @@ CC		=	gcc
 
 CFLAGS	=	-Wall -Wextra -Werror -I includes
 
-LFLAGS	=	-L libft
+LFLAGS	=	-L libft -g3 -fsanitize=address
 
 all		:	$(NAME)
 
-$(NAME)	:	$(OBJS)
+$(NAME)	:	$(OBJS) main.o
 			make -C libft
 			ar rc $(NAME) $(OBJS)
-			$(CC) main.c $(NAME)
+			$(CC) main.o $(NAME) $(LFLAGS)
+
+main.o	:	main.c
+			$(CC) -o $@ -c $< $(CFLAGS)
 
 %.o		:	%.c
 			$(CC) -o $@ -c $< $(CFLAGS)

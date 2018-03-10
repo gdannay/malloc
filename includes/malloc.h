@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/09 16:25:57 by gdannay           #+#    #+#             */
-/*   Updated: 2018/03/09 18:51:44 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/03/10 14:15:34 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,23 @@
 # include <stdio.h>
 # include <sys/mman.h>
 # include <unistd.h>
+# include "../libft/libft.h"
 
 # define SIZE_TINY (2 * getpagesize())
-# define MAX_TINY 128
+# define MAX_TINY 256
 
-# define SIZE_SMALL (16 * getpagesize())
+# define SIZE_SMALL (8 * getpagesize())
 # define MAX_SMALL 1024
 
 # define SIZE_BLOCK (sizeof(struct s_block))
-# define SIZE_ZONE (sizeof(struct s_zone))
+# define SIZE_MAP (sizeof(struct s_map))
 
-typedef enum		e_zone_type
+typedef enum		e_map_type
 {
 	TINY,
 	SMALL,
 	LARGE
-}					t_zone_type;
+}					t_map_type;
 
 typedef struct		s_block
 {
@@ -41,15 +42,21 @@ typedef struct		s_block
 	struct s_block	*next;
 }					t_block;
 
-typedef struct		s_zone
+typedef struct		s_map
 {
 	int				type;
-	int				rest;
 	t_block			*block;
-	struct s_zone	*next;
-}					t_zone;
+	struct s_map	*next;
+}					t_map;
 
 void			*ft_malloc(size_t size);
-t_block			*create_new_zone(t_zone *first_zone, size_t size, int type);
+int				get_map_type(size_t size);
+int				get_alloc_size(size_t size);
+t_block			*get_free_block(size_t size);
+t_map			**get_first_map(void);
+t_map			*create_new_map(t_map **first_map, size_t size, int type);
+t_block			*alloc_block(t_map *map);
+void			arrange_map(t_block *block, size_t size);
+void			show_alloc_mem(void);
 
 #endif
