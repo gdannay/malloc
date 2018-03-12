@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 11:51:51 by gdannay           #+#    #+#             */
-/*   Updated: 2018/03/10 16:25:10 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/03/12 14:14:24 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,63 @@ t_block	*get_free_block(size_t size)
 	free_block->size = size;
 	free_block->free = 0;
 	return (free_block);
+}
+
+void	fusion_block(t_map *map)
+{
+	t_block	*tmp;
+	t_map	**first;
+
+	if (!map)
+		return ;
+	first = get_first_map();
+	tmp = map->block;
+	while (tmp)
+	{
+		if (tmp->free && tmp->next && tmp->next->free)
+		{
+			tmp->size = tmp->size + tmp->next->size + SIZE_BLOCK;
+			tmp->next = tmp->next->next;
+			tmp = map->block;
+		}
+		else
+			tmp = tmp->next;
+	}
+	if (map->block->next == NULL && map->block->free == 1)
+	{
+		if (map->prev == NULL)
+			*first = map->next;
+		else if (map->next == NULL)
+			map->prev->next = NULL;
+		else 
+		{
+			map->prev->next = map->next;
+			map->next->prev = map->prev;
+		}
+		munmap((void *)map, map->block->size + SIZE_MAP + SIZE_BLOCK);
+	}
+}
+
+t_map		*search_map(void *ptr)
+{
+	t_map	**map;
+	t_block	*block;
+	t_map	*tmp;
+
+	if (!ptr)
+		return (NULL);
+	map = get_first_map();
+	tmp = *map;
+	while (tmp)
+	{
+		block = tmp->block;
+		while (block)
+		{
+			if ((char *)block + SIZE_BLOCK == ptr)
+				return (tmp);
+			block = block->next;
+		}
+		tmp = tmp->next;
+	}
+	return (NULL);
 }

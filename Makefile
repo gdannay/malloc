@@ -6,7 +6,7 @@
 #    By: gdannay <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/09 16:14:24 by gdannay           #+#    #+#              #
-#    Updated: 2018/03/10 14:38:44 by gdannay          ###   ########.fr        #
+#    Updated: 2018/03/12 14:56:46 by gdannay          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,9 @@ NAME	=	libft_malloc.a
 
 SRCS	=	srcs/main.c			\
 			srcs/map.c			\
-			srcs/block.c
+			srcs/block.c		\
+			srcs/ft_memcpy.c	\
+			srcs/utoa_base.c
 
 OBJS	=	$(SRCS:.c=.o)
 

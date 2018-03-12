@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map.c                                             :+:      :+:    :+:   */
+/*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/09 17:44:03 by gdannay           #+#    #+#             */
-/*   Updated: 2018/03/10 16:28:59 by gdannay          ###   ########.fr       */
+/*   Created: 2018/03/12 10:43:13 by gdannay           #+#    #+#             */
+/*   Updated: 2018/03/12 14:57:02 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,12 @@ t_map	*create_new_map(t_map **first_map, size_t size, int type)
 
 	alloc_size = get_alloc_size(size);
 	tmp = *first_map;
-	if ((new = (t_map *)mmap(0, alloc_size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == NULL)
+	if ((new = (t_map *)mmap(0, alloc_size,
+		PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == MAP_FAILED)
 		return (NULL);
 	new->type = type;
 	new->next = NULL;
+	new->prev = NULL;
 	if (*first_map == NULL)
 		*first_map = new;
 	else
@@ -67,6 +69,7 @@ t_map	*create_new_map(t_map **first_map, size_t size, int type)
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;
+		new->prev = tmp;
 	}
 	return (new);
 }

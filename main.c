@@ -17,15 +17,37 @@ int	main()
 	c[2] = 'l';
 	c[254] = 'h';
 	d[0] = 'i';
+	d[1] = 'c';
+	d[2] = 'a';
+	d[2] = 'a';
+//	d[2] = (char)230;
 	e[0] = 'o';
 	f[0] = '5';
 	a[0] = '0';
 	w[0] = 't';
 	z[0] = 't';
-	o[10 * getpagesize() + 1] = 'y';
+	o[0] = 'y';
 	q[0] = 'i';
 	y[0] = 'j';
 	f[10001] = 0;
 	printf("TAILLE: block %p\n", o);
 	show_alloc_mem();
+	ft_free(q);
+	ft_free((char *)e + 1);
+	ft_free(o);
+	ft_free(w);
+	ft_free((char *)a + 1);
+	printf("\n\n");
+	show_alloc_mem();
+	ft_realloc(e, 1005);
+	printf("\n\n");
+	show_alloc_mem();
+/*	int i;
+	i = 0;
+	while (++i < 120)
+	{
+		o = (char *)ft_malloc(259);
+	}
+	printf("\n\n");
+	show_alloc_mem();*/
 }
