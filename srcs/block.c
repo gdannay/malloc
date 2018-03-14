@@ -6,13 +6,14 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 11:51:51 by gdannay           #+#    #+#             */
-/*   Updated: 2018/03/12 14:14:24 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/03/14 15:14:19 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-t_block	*create_new_block(t_map **first_map, t_map **map, size_t size, int map_type)
+t_block			*create_new_block(t_map **first_map,
+					t_map **map, size_t size, int map_type)
 {
 	t_block	*free_block;
 
@@ -36,7 +37,7 @@ static t_block	*parse_block(size_t size, t_block *block)
 	return (tmp);
 }
 
-t_block	*get_free_block(size_t size)
+t_block			*get_free_block(size_t size)
 {
 	t_map	*map;
 	t_map	**first_map;
@@ -50,11 +51,13 @@ t_block	*get_free_block(size_t size)
 		return (create_new_block(first_map, &map, size, map_type));
 	while (map)
 	{
-		if (map->type == map_type && (free_block = parse_block(size, map->block)))
+		if (map->type == map_type &&
+			(free_block = parse_block(size, map->block)))
 			break ;
 		map = map->next;
 	}
-	if (!map && !(free_block = create_new_block(first_map, &map, size, map_type)))
+	if (!map &&
+		!(free_block = create_new_block(first_map, &map, size, map_type)))
 		return (NULL);
 	if (free_block->size != size)
 		arrange_map(free_block, size);
@@ -63,7 +66,7 @@ t_block	*get_free_block(size_t size)
 	return (free_block);
 }
 
-void	fusion_block(t_map *map)
+void			fusion_block(t_map *map)
 {
 	t_block	*tmp;
 	t_map	**first;
@@ -84,21 +87,10 @@ void	fusion_block(t_map *map)
 			tmp = tmp->next;
 	}
 	if (map->block->next == NULL && map->block->free == 1)
-	{
-		if (map->prev == NULL)
-			*first = map->next;
-		else if (map->next == NULL)
-			map->prev->next = NULL;
-		else 
-		{
-			map->prev->next = map->next;
-			map->next->prev = map->prev;
-		}
-		munmap((void *)map, map->block->size + SIZE_MAP + SIZE_BLOCK);
-	}
+		delete_map(first, map);
 }
 
-t_map		*search_map(void *ptr)
+t_map			*search_map(void *ptr)
 {
 	t_map	**map;
 	t_block	*block;

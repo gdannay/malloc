@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 10:43:13 by gdannay           #+#    #+#             */
-/*   Updated: 2018/03/12 14:57:02 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/03/14 15:14:51 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,18 @@ int		get_alloc_size(size_t size)
 	return (size + SIZE_MAP + SIZE_BLOCK);
 }
 
-t_map	**get_first_map(void)
+void	delete_map(t_map **first, t_map *map)
 {
-	static t_map	*map = NULL;
-
-	return (&map);
+	if (map->prev == NULL)
+		*first = map->next;
+	else if (map->next == NULL)
+		map->prev->next = NULL;
+	else
+	{
+		map->prev->next = map->next;
+		map->next->prev = map->prev;
+	}
+	munmap((void *)map, map->block->size + SIZE_MAP + SIZE_BLOCK);
 }
 
 int		get_map_type(size_t size)

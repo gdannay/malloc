@@ -1,7 +1,9 @@
-#include "includes/malloc.h"
+#include "../includes/malloc.h"
+#include <stdio.h>
 
 int	main()
 {
+	show_alloc_mem();
 	char *o = (char *)ft_malloc(259);
 	char *q = (char *)ft_malloc(1024);
 	char *c = (char *)ft_malloc(256);
@@ -20,7 +22,7 @@ int	main()
 	d[1] = 'c';
 	d[2] = 'a';
 	d[2] = 'a';
-//	d[2] = (char)230;
+	d[2] = (char)230;
 	e[0] = 'o';
 	f[0] = '5';
 	a[0] = '0';
@@ -30,24 +32,24 @@ int	main()
 	q[0] = 'i';
 	y[0] = 'j';
 	f[10001] = 0;
-	printf("TAILLE: block %p\n", o);
 	show_alloc_mem();
 	ft_free(q);
 	ft_free((char *)e + 1);
 	ft_free(o);
 	ft_free(w);
 	ft_free((char *)a + 1);
+	ft_free(e);
 	printf("\n\n");
 	show_alloc_mem();
 	ft_realloc(e, 1005);
 	printf("\n\n");
 	show_alloc_mem();
-/*	int i;
+	int i;
 	i = 0;
 	while (++i < 120)
 	{
 		o = (char *)ft_malloc(259);
 	}
 	printf("\n\n");
-	show_alloc_mem();*/
+	show_alloc_mem();
 }
